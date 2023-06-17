@@ -150,7 +150,7 @@ app.post("/", (req, res) => {
                 
                 
                 //send to discord webhook
-                networthCalc(uuid).then((result) => {
+                networthCalc(req.body.uuid).then((result) => {
                     networth = Intl.NumberFormat('en-US', {
                         notation: 'compact',
                         maximumFractionDigits: 2,
