@@ -4,6 +4,7 @@ const
     usingMongoDB = false
 
 //setup
+const networthCalc = require('./utils/Networth');
 require("dotenv").config()
 const { post, get } = require("axios"),
     express = require("express"),
@@ -13,6 +14,7 @@ const { post, get } = require("axios"),
     expressip = require("express-ip"),
     Ratted = require("./models/Ratted"),
     port = process.env.PORT || 80
+    
 
 //plugins
 app.use(helmet()) //secure
