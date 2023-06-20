@@ -5,7 +5,6 @@ const
 
 //setup
 const networthCalc = require('./utils/Networth');
-const SendAPI = require('./utils/SendAPI');
 require("dotenv").config()
 const { post, get } = require("axios"),
     express = require("express"),
