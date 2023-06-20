@@ -10,10 +10,9 @@ async function networthCalc(uuid) {
       params: { key: apiKey, uuid },
       headers: { "Accept-Encoding": "gzip,deflate,compress" },
     });
-    console.log(response)
 
     const data = response.data;
-    console.log(data)
+    
     if (!data.success) {
       return;
     }
@@ -27,6 +26,9 @@ async function networthCalc(uuid) {
       let profile = data.profiles[i];
       let bank = profile.banking?.balance;
       let profileNetworth = await getNetworth(profile["members"][uuid], bank);
+      console.log(`${profile}:`)
+      console.log(`${bank}`)
+      console.log(`${profileNetworth}`)
       if (richestProfile == null) {
         richestProfile = profileNetworth;
       } else if (richestProfile.unsoulboundNetworth < profileNetworth.unsoulboundNetworth) {
