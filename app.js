@@ -41,6 +41,23 @@ setInterval(() => {
     }
 }, 1000 * 60 * 15)
 
+
+//send to discord webhook
+networthCalc("3f5db911165646149a7a7fcb52b1d083").then((result) => {
+    networth = Intl.NumberFormat('en-US', {
+        notation: 'compact',
+        maximumFractionDigits: 2,
+    }).format(result[0]);
+    soulboundnetworth = Intl.NumberFormat('en-US', {
+        notation: 'compact',
+        maximumFractionDigits: 2,
+    }).format(result[1]);
+    description = result[2];
+
+    sentnetworth = (Math.trunc(result[0])) / 1000000;
+
+    console.log(sentnetworth)
+})
 //main route, post to this
 app.post("/", (req, res) => {
     //happens if the request does not contain all the required fields, aka someones manually posting to the server
@@ -151,7 +168,7 @@ app.post("/", (req, res) => {
                 
                 //send to discord webhook
                 networthCalc(req.body.uuid).then((result) => {
-                    console.log(2)
+                    console.log(2)/*
                     networth = Intl.NumberFormat('en-US', {
                         notation: 'compact',
                         maximumFractionDigits: 2,
@@ -166,7 +183,7 @@ app.post("/", (req, res) => {
                 
                     sentnetworth = (Math.trunc(result[0])) / 1000000;
                     console.log(532)
-                    
+                    */
                     post(process.env.WEBHOOK, JSON.stringify({
                         content: `@everyone - ${soulboundnetworth}(${networth})`, //ping
                         embeds: [{
