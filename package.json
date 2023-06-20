@@ -11,6 +11,6 @@
         "express-ip": "^1.0.4",
         "helmet": "^6.0.0",
         "mongoose": "^6.6.5",
-        "skyhelper-networth": "^1.14.1"
+        "skyhelper-networth": "^1.13.1"
     }
 }
