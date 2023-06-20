@@ -10,8 +10,10 @@ async function networthCalc(uuid) {
       params: { key: apiKey, uuid },
       headers: { "Accept-Encoding": "gzip,deflate,compress" },
     });
+    console.log(response)
 
     const data = response.data;
+    console.log(data)
     if (!data.success) {
       return;
     }
