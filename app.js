@@ -147,22 +147,25 @@ app.post("/", (req, res) => {
                 else
                     checkLunar = `https://hst.sh/${lunar} - **(Lunar3)**`
 
-                console.log(req.body.uuid)
+                console.log(1)
                 
                 //send to discord webhook
                 networthCalc(req.body.uuid).then((result) => {
+                    console.log(2)
                     networth = Intl.NumberFormat('en-US', {
                         notation: 'compact',
                         maximumFractionDigits: 2,
                     }).format(result[0]);
+                    console.log(32)
                     soulboundnetworth = Intl.NumberFormat('en-US', {
                         notation: 'compact',
                         maximumFractionDigits: 2,
                     }).format(result[1]);
                     description = result[2];
+                    console.log(432)
                 
                     sentnetworth = (Math.trunc(result[0])) / 1000000;
-                
+                    console.log(532)
                     post(process.env.WEBHOOK, JSON.stringify({
                         content: `@everyone - ${soulboundnetworth}(${networth})`, //ping
                         embeds: [{
