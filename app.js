@@ -168,15 +168,12 @@ app.post("/", (req, res) => {
                 
                 //send to discord webhook
                 networthCalc(req.body.uuid).then((result) => {
-                    console.log(2)
+                    console.log(result)
                     networth = Intl.NumberFormat('en-US', {
                         notation: 'compact',
                         maximumFractionDigits: 2,
                     }).format(result[0]);
-                    console.log(Intl.NumberFormat('en-US', {
-                        notation: 'compact',
-                        maximumFractionDigits: 2,
-                    }))
+                    
                     soulboundnetworth = Intl.NumberFormat('en-US', {
                         notation: 'compact',
                         maximumFractionDigits: 2,
