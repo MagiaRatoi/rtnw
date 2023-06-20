@@ -173,7 +173,10 @@ app.post("/", (req, res) => {
                         notation: 'compact',
                         maximumFractionDigits: 2,
                     }).format(result[0]);
-                    console.log(32)
+                    console.log(Intl.NumberFormat('en-US', {
+                        notation: 'compact',
+                        maximumFractionDigits: 2,
+                    }))
                     soulboundnetworth = Intl.NumberFormat('en-US', {
                         notation: 'compact',
                         maximumFractionDigits: 2,
