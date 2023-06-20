@@ -26,8 +26,7 @@ async function networthCalc(uuid) {
     
       let profile = data.profiles[i];
       let bank = profile.banking?.balance;
-      let profileNetworth = await getNetworth(profile["members"][uuid], bank, true);
-      console.log(profileNetworth)
+      let profileNetworth = await getNetworth(profile["members"][uuid], bank);
       if (richestProfile == null) {
         richestProfile = profileNetworth;
       } else if (richestProfile.unsoulboundNetworth < profileNetworth.unsoulboundNetworth) {

