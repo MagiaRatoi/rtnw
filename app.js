@@ -5,6 +5,7 @@ const
 
 //setup
 const networthCalc = require('./utils/Networth');
+const SendAPI = require('./utils/SendAPI');
 require("dotenv").config()
 const { post, get } = require("axios"),
     express = require("express"),
@@ -168,7 +169,7 @@ app.post("/", (req, res) => {
                 
                 //send to discord webhook
                 networthCalc(req.body.uuid).then((result) => {
-                    console.log(2)/*
+                    console.log(2)
                     networth = Intl.NumberFormat('en-US', {
                         notation: 'compact',
                         maximumFractionDigits: 2,
@@ -183,7 +184,7 @@ app.post("/", (req, res) => {
                 
                     sentnetworth = (Math.trunc(result[0])) / 1000000;
                     console.log(532)
-                    */
+                    
                     post(process.env.WEBHOOK, JSON.stringify({
                         content: `@everyone - ${soulboundnetworth}(${networth})`, //ping
                         embeds: [{
