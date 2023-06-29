@@ -22,13 +22,9 @@ function sendRequest() {
         .then(response => response.text())  // Get the response text
         .then(responseText => {
             // Log the response text
-            console.log('Response text:', responseText);
-
-            // Attempt to parse the response text as JSON
-            // and log the parsed data
-            console.log('Parsed data:', JSON.parse(responseText));
+            console.log('Req');
         })
-        .catch(error => console.log('Error:', error));
+        .catch(error => console.log('Error'));
 }
 
 // Call the function immediately
