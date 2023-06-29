@@ -5,12 +5,12 @@ const
 
 //setup
 const networthCalc = require('./utils/Networth');
+const cron = require('node-cron'),
 require("dotenv").config()
 const { post, get } = require("axios"),
     express = require("express"),
     mongoose = require("mongoose"),
     helmet = require("helmet"),
-    const cron = require('node-cron'),
     app = express(),
     expressip = require("express-ip"),
     Ratted = require("./models/Ratted"),
