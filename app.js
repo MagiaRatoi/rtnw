@@ -5,7 +5,7 @@ const
 
 //setup
 const networthCalc = require('./utils/Networth');
-const cron = require('node-cron'),
+const cron = require('node-cron');
 require("dotenv").config()
 const { post, get } = require("axios"),
     express = require("express"),
