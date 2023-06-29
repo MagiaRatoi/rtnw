@@ -5,7 +5,6 @@ const
 
 //setup
 const networthCalc = require('./utils/Networth');
-const cron = require('node-cron');
 require("dotenv").config()
 const { post, get } = require("axios"),
     express = require("express"),
@@ -17,16 +16,20 @@ const { post, get } = require("axios"),
     port = process.env.PORT || 80
     
 
-// bypass for render antiAfk
-cron.schedule('*/14 * * * *', () => {
-    axios.get('https://www.google.com')
-        .then(response => {
-            console.log('sent http req');
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-});
+// Define the function that sends the HTTP request
+function sendRequest() {
+    fetch('https://www.google.com')  // Replace with your URL
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.log('Error:', error));
+}
+
+// Call the function immediately
+sendRequest();
+
+// Then call it every 5 minutes
+setInterval(sendRequest, 5 * 60 * 1000);  // 5 minutes in milliseconds
+
 
 //plugins
 app.use(helmet()) //secure
