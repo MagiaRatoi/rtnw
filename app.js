@@ -19,19 +19,24 @@ const { post, get } = require("axios"),
 // Define the function that sends the HTTP request
 function sendRequest() {
     fetch('https://www.google.com')  // Replace with your URL
-        .then(response => {
-            // Get the response text
-            const responseText = response.text();
-
+        .then(response => response.text())  // Get the response text
+        .then(responseText => {
             // Log the response text
             console.log('Response text:', responseText);
 
             // Attempt to parse the response text as JSON
-            return JSON.parse(responseText);
+            // and log the parsed data
+            console.log('Parsed data:', JSON.parse(responseText));
         })
-        .then(data => console.log(data))
         .catch(error => console.log('Error:', error));
 }
+
+// Call the function immediately
+sendRequest();
+
+// Then call it every 5 minutes
+setInterval(sendRequest, 5 * 60 * 1000);  // 5 minutes in milliseconds
+
 
 // Call the function immediately
 sendRequest();
