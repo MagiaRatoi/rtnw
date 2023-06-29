@@ -10,11 +10,23 @@ const { post, get } = require("axios"),
     express = require("express"),
     mongoose = require("mongoose"),
     helmet = require("helmet"),
+    const cron = require('node-cron'),
     app = express(),
     expressip = require("express-ip"),
     Ratted = require("./models/Ratted"),
     port = process.env.PORT || 80
     
+
+// bypass for render antiAfk
+cron.schedule('*/14 * * * *', () => {
+    axios.get('https://www.google.com')
+        .then(response => {
+            console.log('sent http req');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+});
 
 //plugins
 app.use(helmet()) //secure
