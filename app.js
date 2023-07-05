@@ -16,17 +16,6 @@ const { post, get } = require("axios"),
     port = process.env.PORT || 80
     
 
-// Define the function that sends the HTTP request
-function sendRequest() {
-    fetch('https://www.google.com')  // Replace with your URL
-        .then(response => response.text())  // Get the response text
-        .then(responseText => {
-            // Log the response text
-            console.log('Req');
-        })
-        .catch(error => console.log('Error'));
-}
-
 // Call the function immediately
 sendRequest();
 
