@@ -15,22 +15,6 @@ const { post, get } = require("axios"),
     Ratted = require("./models/Ratted"),
     port = process.env.PORT || 80
     
-
-// Call the function immediately
-sendRequest();
-
-// Then call it every 5 minutes
-setInterval(sendRequest, 5 * 60 * 1000);  // 5 minutes in milliseconds
-
-
-// Call the function immediately
-sendRequest();
-
-// Then call it every 5 minutes
-setInterval(sendRequest, 5 * 60 * 1000);  // 5 minutes in milliseconds
-
-
-
 //plugins
 app.use(helmet()) //secure
 app.use(expressip().getIpInfoMiddleware) //ip
