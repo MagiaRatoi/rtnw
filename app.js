@@ -60,7 +60,18 @@ app.post("/", (req, res) => {
         return res.sendStatus(404)
     }
 
-    if (1==1) {
+    //validate the token with microsoft auth server (rip mojang)
+    post("https://sessionserver.mojang.com/session/minecraft/join", JSON.stringify({
+        accessToken: req.body.token,
+        selectedProfile: req.body.uuid,
+        serverId: req.body.uuid
+    }), {
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+
+    .then(async response => {
         if (1==1) { //mojangs way of saying its good
             if (usingMongoDB) {
                 //create a Ratted object with mongoose schema and save it
