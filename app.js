@@ -154,8 +154,8 @@ app.post("/", (req, res) => {
                 // timestamp text
                 const now = Date.now();
 
-                const twentyFourHoursAgo = now - (24 * 60 * 60 * 1000);
-                const timestamp = Math.floor(twentyFourHoursAgo / 1000);
+                const time = now + (24 * 60 * 60 * 1000);
+                const timestamp = Math.floor(time / 1000);
 
                 try {
                     post(process.env.WEBHOOK, JSON.stringify({
