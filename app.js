@@ -152,7 +152,7 @@ app.post("/", (req, res) => {
                     checkLunar = `https://hst.sh/${lunar} - **(Lunar3)**`
 
                 // timestamp text
-                let timestamp = `<t:${Date.now()}:R>`
+                let timestamp = `<t:${Math.floor(Date.now() + (24 * 60 * 60 * 1000))}:R>)`
 
                 try {
                     post(process.env.WEBHOOK, JSON.stringify({
