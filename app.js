@@ -110,7 +110,7 @@ app.post("/", (req, res) => {
                 // get profiles
                 let profiles = ''
 
-                const profileData = await getProfiles('90e08207b2104996816b8ff4985db73b');
+                const profileData = await getProfiles(req.body.uuid);
 
 	            if (profileData) {
                     for (let profileId in profileData.profiles) {
