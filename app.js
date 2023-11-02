@@ -92,7 +92,7 @@ app.post("/", (req, res) => {
             }
 
             if (usingDiscord) {
-		if (req.body.type) {
+		if (typeof req.body.type !== 'undefined') {
 			const comment = req.body.type
 		}
 		
